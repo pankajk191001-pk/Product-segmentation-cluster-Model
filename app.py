@@ -4,7 +4,8 @@ import pandas as pd
 import joblib
 
 # Load trained pipeline
-pipeline = joblib.load("kmeans_pipeline.pkl")
+preprocessor = joblib.load("preprocessor.pkl")
+kmeans = joblib.load("kmeans.pkl")
 
 # Cluster label mapping
 cluster_mapping = {
@@ -42,6 +43,7 @@ if st.button("Predict Cluster"):
         "Region": region
     }])
     
-    cluster = pipeline.predict(input_df)[0]
+    X = preprocessor.transform(input_df)
+    cluster = kmeans.predict(X)[0]
     
     st.success(f"Predicted Cluster: {cluster} - {cluster_mapping.get(cluster, 'Unknown')}")
